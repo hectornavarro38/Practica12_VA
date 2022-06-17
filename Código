@@ -1,0 +1,37 @@
+import numpy as np
+import cv2
+
+img = cv2.imread('imagen.jpg')
+rimg = cv2.resize(img, (600,600))
+imgray = cv2.cvtColor(rimg,cv2.COLOR_RGB2GRAY)
+
+forma=np.shape(imgray)
+img2=np.zeros(forma)
+k = np.array([[1,0,-1],[1,0,-1],[1,0,-1]])
+
+#Implementando el algorit5mo
+for x in list(range(1,forma[1]-1)):
+    
+    for y in list(range(1,forma[1]-1)):
+        suma = 0
+        
+        for i in list(range(-1,2)):
+
+            for j in list(range(-1,2)):
+                suma = imgray[x-i,y-j]*k[i+1,j+1]+suma
+
+        img2[x,y] = suma
+            
+maxs=np.max(img2) #Imagen que acabo de calcular
+
+                 
+#Normalizar
+img2 = img2*255/maxs
+
+# convertir
+img2 = img2.astype(np.uint8)
+
+cv2.imshow('Imagen original',imgray)
+cv2.imshow('Imagen filtrada',img2)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
